@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LockNLoad.Model\LockNLoad.Model.csproj" />
     <ProjectReference Include="..\LockNLoad.Service\LockNLoad.Service.csproj" />
   </ItemGroup>

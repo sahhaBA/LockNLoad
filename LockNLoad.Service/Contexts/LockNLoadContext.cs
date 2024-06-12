@@ -9,15 +9,6 @@ namespace LockNLoad.Service.Contexts
 {
     public partial class LockNLoadContext : DbContext
     {
-        public LockNLoadContext()
-        {
-        }
-
-        public LockNLoadContext(DbContextOptions<LockNLoadContext> options)
-            : base(options)
-        {
-        }
-
         public virtual DbSet<Appointment> Appointments { get; set; } = null!;
         public virtual DbSet<Bill> Bills { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
@@ -31,16 +22,8 @@ namespace LockNLoad.Service.Contexts
         public virtual DbSet<UserAppointmentEquipment> UserAppointmentEquipments { get; set; } = null!;
         public virtual DbSet<UserRole> UserRoles { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public LockNLoadContext(DbContextOptions<LockNLoadContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=LockNLoad;Integrated Security=True;");
-
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection") + ";TrustServerCertificate=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
