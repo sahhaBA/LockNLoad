@@ -30,17 +30,11 @@ namespace LockNLoad.Service.Contexts
         {
             modelBuilder.Entity<Appointment>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Description)
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
                 entity.Property(e => e.EndDateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.StartDateTime).HasColumnType("datetime");
 
@@ -52,12 +46,6 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<Bill>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
                 entity.HasOne(d => d.Request)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.RequestId)
@@ -66,12 +54,6 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -79,15 +61,9 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<Equipment>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.EquipmentImageUrl)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
@@ -103,15 +79,9 @@ namespace LockNLoad.Service.Contexts
             {
                 entity.Property(e => e.ApprovedDateTime).HasColumnType("datetime");
 
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Description)
                     .HasMaxLength(100)
                     .IsUnicode(false);
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.RejectedDateTime).HasColumnType("datetime");
 
@@ -123,25 +93,13 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<Review>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Description)
                     .HasMaxLength(500)
                     .IsUnicode(false);
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -149,10 +107,6 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<TrainingGround>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Description)
                     .HasMaxLength(500)
                     .IsUnicode(false);
@@ -165,8 +119,6 @@ namespace LockNLoad.Service.Contexts
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -177,11 +129,7 @@ namespace LockNLoad.Service.Contexts
                 entity.HasIndex(e => e.Username, "UQ__Users__536C85E40FA8C1C6")
                     .IsUnique();
 
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.DateOfRegistration).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(50)
@@ -194,8 +142,6 @@ namespace LockNLoad.Service.Contexts
                 entity.Property(e => e.LastName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.PasswordHash)
                     .HasMaxLength(64)
@@ -220,12 +166,6 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<UserAppointment>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
                 entity.HasOne(d => d.Appointment)
                     .WithMany(p => p.UserAppointments)
                     .HasForeignKey(d => d.AppointmentId)
@@ -246,12 +186,6 @@ namespace LockNLoad.Service.Contexts
             {
                 entity.ToTable("UserAppointmentEquipment");
 
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
                 entity.HasOne(d => d.Equipment)
                     .WithMany(p => p.UserAppointmentEquipments)
                     .HasForeignKey(d => d.EquipmentId)
@@ -265,12 +199,6 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<UserRole>(entity =>
             {
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.UserRoles)
                     .HasForeignKey(d => d.RoleId)

@@ -12,6 +12,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LockNLoad.Model", "LockNLoad.Model\LockNLoad.Model.csproj", "{C946FABB-7691-4FBB-92B3-01D44354399E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LockNLoad.Service", "LockNLoad.Service\LockNLoad.Service.csproj", "{94BDE7A9-87B6-4A61-B594-E75113CB82D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C946FABB-7691-4FBB-92B3-01D44354399E} = {C946FABB-7691-4FBB-92B3-01D44354399E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

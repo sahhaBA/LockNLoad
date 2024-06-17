@@ -23,12 +23,6 @@ namespace LockNLoad.Service.Entities
         public DateTime? DateOfRegistration { get; set; }
         public string? PasswordHash { get; set; }
         public string? Salt { get; set; }
-        public int? CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public int? ModifiedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public int? DeletedBy { get; set; }
-        public DateTime? DeletedDate { get; set; }
 
         public virtual ICollection<UserAppointment> UserAppointments { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
