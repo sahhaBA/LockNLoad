@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using LockNLoad.Model.Response;
+using LockNLoad.Model.Responses;
 using LockNLoad.Model.SearchObjects;
 using LockNLoad.Service.Contexts;
 using LockNLoad.Service.Interfaces;
@@ -64,6 +64,19 @@ namespace LockNLoad.Service.Services
             var entity = await _context.Set<TDb>().FindAsync(id);
 
             return _mapper.Map<T>(entity);
+        }
+
+        public virtual async Task<PagedResult<T>> GetAll()
+        {
+            var query = _context.Set<TDb>().AsQueryable();
+            var list = await query.ToListAsync();
+            var mappedList = _mapper.Map<List<T>>(list);
+
+            return new PagedResult<T>
+            {
+                Result = mappedList,
+                Count = mappedList.Count
+            };
         }
     }
 }

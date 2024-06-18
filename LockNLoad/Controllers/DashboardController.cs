@@ -1,28 +1,27 @@
-﻿using LockNLoad.Service.Contexts;
+﻿using LockNLoad.Model.Requests;
+using LockNLoad.Model.Responses;
+using LockNLoad.Model.SearchObjects;
+using LockNLoad.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LockNLoad.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DashboardController : ControllerBase
+    public class DashboardController : BaseCRUDController<RoleResponse, RoleSearchObject, RoleInsertRequest, RoleUpdateRequest>
     {
-        private readonly LockNLoadContext _context;
-
-        public DashboardController(LockNLoadContext context)
+        public DashboardController(ILogger<BaseController<RoleResponse, RoleSearchObject>> logger, IRoleService service) : base(logger, service)
         {
-            _context = context;
+
         }
 
         [HttpGet("testConnection")]
-        public IActionResult TestConnection()
+        public async Task<IActionResult> TestConnection()
         {
             try
             {
-                _context.Database.OpenConnection();
-                _context.Database.CloseConnection();
-                return Ok("Connection successful!");
+                var model = await _service.GetAll();
+                return Ok(model);
             }
             catch (Exception ex)
             {

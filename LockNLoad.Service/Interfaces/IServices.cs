@@ -1,4 +1,4 @@
-﻿using LockNLoad.Model.Response;
+﻿using LockNLoad.Model.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +11,6 @@ namespace LockNLoad.Service.Interfaces
     {
         Task<PagedResult<T>> Get(TSearch search = null);
         Task<T> GetById(int id);
+        Task<PagedResult<T>> GetAll();
     }
 }

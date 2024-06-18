@@ -7,7 +7,6 @@ namespace LockNLoad.Service.Entities
     {
         public User()
         {
-            Bugs = new HashSet<Bug>();
             UserAppointments = new HashSet<UserAppointment>();
             UserRoles = new HashSet<UserRole>();
         }
@@ -25,7 +24,7 @@ namespace LockNLoad.Service.Entities
         public string? PasswordHash { get; set; }
         public string? Salt { get; set; }
 
-        public virtual ICollection<Bug> Bugs { get; set; }
+        public virtual Gender? Gender { get; set; }
         public virtual ICollection<UserAppointment> UserAppointments { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿using LockNLoad.Model.Response;
+﻿using LockNLoad.Model.Responses;
 using LockNLoad.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

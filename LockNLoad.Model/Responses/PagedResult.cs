@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LockNLoad.Model.Response
+namespace LockNLoad.Model.Responses
 {
     public class PagedResult<T>
     {

@@ -5,8 +5,8 @@ using LockNLoad.Service.Entities;
 
 namespace LockNLoad.Service.Interfaces
 {
-    public interface IUserService : ICRUDService<UserResponse, UserSearchObject, UserInsertRequest, UserUpdateRequest>
+    public interface IRoleService : ICRUDService<RoleResponse, RoleSearchObject, RoleInsertRequest, RoleUpdateRequest>
     {
-        public Task<UserResponse> Login(string username, string password);
+
     }
 }

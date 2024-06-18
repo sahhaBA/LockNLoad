@@ -19,13 +19,12 @@ namespace LockNLoad.Service.Contexts
 
         public virtual DbSet<Appointment> Appointments { get; set; } = null!;
         public virtual DbSet<Bill> Bills { get; set; } = null!;
-        public virtual DbSet<Bug> Bugs { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Equipment> Equipment { get; set; } = null!;
+        public virtual DbSet<Gender> Genders { get; set; } = null!;
         public virtual DbSet<Request> Requests { get; set; } = null!;
         public virtual DbSet<Review> Reviews { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
-        public virtual DbSet<Status> Statuses { get; set; } = null!;
         public virtual DbSet<TrainingGround> TrainingGrounds { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<UserAppointment> UserAppointments { get; set; } = null!;
@@ -36,6 +35,7 @@ namespace LockNLoad.Service.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=LockNLoad;User Id=rsII;Password=razvojsoftvera1234#;");
             }
         }
@@ -66,29 +66,6 @@ namespace LockNLoad.Service.Contexts
                     .HasConstraintName("FK_Bills_RequestId");
             });
 
-            modelBuilder.Entity<Bug>(entity =>
-            {
-                entity.Property(e => e.DateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Description)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Title)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.Bugs)
-                    .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK_Bugs_StatusId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Bugs)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Bugs_UserId");
-            });
-
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.Property(e => e.Description)
@@ -116,6 +93,13 @@ namespace LockNLoad.Service.Contexts
                     .HasConstraintName("FK_Equipment_CategoryId");
             });
 
+            modelBuilder.Entity<Gender>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Request>(entity =>
             {
                 entity.Property(e => e.ApprovedDateTime).HasColumnType("datetime");
@@ -141,17 +125,6 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Status>(entity =>
-            {
-                entity.Property(e => e.Description)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -214,6 +187,11 @@ namespace LockNLoad.Service.Contexts
                 entity.Property(e => e.Username)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Gender)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.GenderId)
+                    .HasConstraintName("FK_Users_GenderId");
             });
 
             modelBuilder.Entity<UserAppointment>(entity =>
