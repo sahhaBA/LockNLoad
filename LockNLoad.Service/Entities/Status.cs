@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace LockNLoad.Service.Entities
 {
-    public partial class Category
+    public partial class Status
     {
-        public Category()
+        public Status()
         {
-            Equipment = new HashSet<Equipment>();
+            Bugs = new HashSet<Bug>();
         }
 
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
 
-        public virtual ICollection<Equipment> Equipment { get; set; }
+        public virtual ICollection<Bug> Bugs { get; set; }
     }
 }

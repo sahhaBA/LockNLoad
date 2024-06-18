@@ -1,13 +1,9 @@
-﻿using LockNLoad.Service.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LockNLoad.Model.SearchObjects;
+using LockNLoad.Service.Entities;
 
 namespace LockNLoad.Service.Interfaces
 {
-    public interface IKorisniciService : ICRUDService<User, Model.SearchObjects.UserSearchObject, Model.Requests.KorisniciInsertRequest, Model.Requests.KorisniciUpdateRequest>
+    public interface IUserService : ICRUDService<User, UserSearchObject, Model.Requests.KorisniciInsertRequest, Model.Requests.KorisniciUpdateRequest>
     {
         public Task<User> Login(string username, string password);
     }

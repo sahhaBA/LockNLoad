@@ -3,27 +3,41 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using LockNLoad.Service.Entities;
-using Microsoft.Extensions.Configuration;
 
 namespace LockNLoad.Service.Contexts
 {
     public partial class LockNLoadContext : DbContext
     {
+        public LockNLoadContext()
+        {
+        }
+
+        public LockNLoadContext(DbContextOptions<LockNLoadContext> options)
+            : base(options)
+        {
+        }
+
         public virtual DbSet<Appointment> Appointments { get; set; } = null!;
         public virtual DbSet<Bill> Bills { get; set; } = null!;
+        public virtual DbSet<Bug> Bugs { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Equipment> Equipment { get; set; } = null!;
         public virtual DbSet<Request> Requests { get; set; } = null!;
         public virtual DbSet<Review> Reviews { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<Status> Statuses { get; set; } = null!;
         public virtual DbSet<TrainingGround> TrainingGrounds { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<UserAppointment> UserAppointments { get; set; } = null!;
         public virtual DbSet<UserAppointmentEquipment> UserAppointmentEquipments { get; set; } = null!;
         public virtual DbSet<UserRole> UserRoles { get; set; } = null!;
 
-        public LockNLoadContext(DbContextOptions<LockNLoadContext> options) : base(options)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=LockNLoad;User Id=rsII;Password=razvojsoftvera1234#;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -52,8 +66,35 @@ namespace LockNLoad.Service.Contexts
                     .HasConstraintName("FK_Bills_RequestId");
             });
 
+            modelBuilder.Entity<Bug>(entity =>
+            {
+                entity.Property(e => e.DateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Title)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Bugs)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_Bugs_StatusId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Bugs)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Bugs_UserId");
+            });
+
             modelBuilder.Entity<Category>(entity =>
             {
+                entity.Property(e => e.Description)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -105,6 +146,17 @@ namespace LockNLoad.Service.Contexts
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Status>(entity =>
+            {
+                entity.Property(e => e.Description)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<TrainingGround>(entity =>
             {
                 entity.Property(e => e.Description)
@@ -126,7 +178,7 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Username, "UQ__Users__536C85E40FA8C1C6")
+                entity.HasIndex(e => e.Username, "UQ__Users__536C85E4CB91BF9B")
                     .IsUnique();
 
                 entity.Property(e => e.DateOfRegistration).HasColumnType("datetime");
