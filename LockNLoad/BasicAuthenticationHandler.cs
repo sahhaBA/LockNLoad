@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Text;
 using LockNLoad.Service.Interfaces;
-using LockNLoad.Model.Responses;
 
 namespace LockNLoad.Api
 {
@@ -22,7 +21,7 @@ namespace LockNLoad.Api
         {
             if (!Request.Headers.ContainsKey("Authorization"))
             {
-                return AuthenticateResult.Fail("Missing Authorization Header");
+                return AuthenticateResult.Fail("Missing header");
             }
 
             var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
@@ -32,45 +31,34 @@ namespace LockNLoad.Api
             var username = credentials[0];
             var password = credentials[1];
 
-            UserResponse user = null;
-
-            // Check for a default user for testing purposes
-            if (username == "testuser" && password == "password123")
-            {
-                user = new UserResponse
-                {
-                    FirstName = "Test",
-                    UserName = "testuser",
-                    UserRoles = new List<UserRoleResponse> { new UserRoleResponse { Role = new RoleResponse { Name = "Admin" } }}
-                };
-            }
-            else
-            {
-                // Normal authentication process
-                user = await _userService.Login(username, password);
-            }
+            var user = await _userService.Login(username, password);
 
             if (user == null)
             {
                 return AuthenticateResult.Fail("Incorrect username or password");
             }
-
-            var claims = new List<Claim>
+            else
             {
-                new Claim(ClaimTypes.Name, user.FirstName),
-                new Claim(ClaimTypes.NameIdentifier, user.UserName)
-            };
 
-            foreach (var role in user.UserRoles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
+
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, user.FirstName),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserName)
+                };
+
+                foreach (var role in user.UserRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
+                }
+
+                var identity = new ClaimsIdentity(claims, Scheme.Name);
+
+                var principal = new ClaimsPrincipal(identity);
+
+                var ticket = new AuthenticationTicket(principal, Scheme.Name);
+                return AuthenticateResult.Success(ticket);
             }
-
-            var identity = new ClaimsIdentity(claims, Scheme.Name);
-            var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, Scheme.Name);
-
-            return AuthenticateResult.Success(ticket);
         }
     }
 }
