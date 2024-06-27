@@ -39,8 +39,6 @@ namespace LockNLoad.Api
             }
             else
             {
-
-
                 var claims = new List<Claim>()
                 {
                     new Claim(ClaimTypes.Name, user.FirstName),

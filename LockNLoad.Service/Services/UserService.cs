@@ -24,7 +24,7 @@ namespace LockNLoad.Service.Services
 
         public async Task<UserResponse> Login(string username, string password)
         {
-            var entity = await _context.Users.Include(x => x.UserRoles).FirstOrDefaultAsync(x => x.Username == username);
+            var entity = await _context.Users.Include(x => x.UserRoles).ThenInclude(y => y.Role).FirstOrDefaultAsync(x => x.Username == username);
 
             if (entity == null)
             {
@@ -43,16 +43,18 @@ namespace LockNLoad.Service.Services
 
         public static string GenerateHash(string salt, string password)
         {
-            byte[] src = Convert.FromBase64String(salt);
-            byte[] bytes = Encoding.Unicode.GetBytes(password);
-            byte[] dst = new byte[src.Length + bytes.Length];
+            byte[] saltBytes = Encoding.UTF8.GetBytes(salt); // Convert salt string to bytes
+            byte[] passwordBytes = Encoding.Unicode.GetBytes(password); // Convert password string to bytes
 
-            System.Buffer.BlockCopy(src, 0, dst, 0, src.Length);
-            System.Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
+            byte[] combinedBytes = new byte[saltBytes.Length + passwordBytes.Length];
+            Buffer.BlockCopy(saltBytes, 0, combinedBytes, 0, saltBytes.Length);
+            Buffer.BlockCopy(passwordBytes, 0, combinedBytes, saltBytes.Length, passwordBytes.Length);
 
             HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
-            byte[] inArray = algorithm.ComputeHash(dst);
-            return Convert.ToBase64String(inArray);
+            byte[] hashBytes = algorithm.ComputeHash(combinedBytes);
+
+            return Convert.ToBase64String(hashBytes);
         }
+
     }
 }

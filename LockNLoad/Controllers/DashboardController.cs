@@ -2,6 +2,7 @@
 using LockNLoad.Model.Responses;
 using LockNLoad.Model.SearchObjects;
 using LockNLoad.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LockNLoad.Api.Controllers
@@ -16,6 +17,7 @@ namespace LockNLoad.Api.Controllers
         }
 
         [HttpGet("testConnection")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> TestConnection()
         {
             try
