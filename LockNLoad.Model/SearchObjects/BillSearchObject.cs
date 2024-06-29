@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace LockNLoad.Model.SearchObjects
 {
-    public class RoleSearchObject : BaseSearchObject
+    public class BillSearchObject : BaseSearchObject
     {
-        
+
     }
 }

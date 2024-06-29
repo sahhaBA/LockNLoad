@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LockNLoad.Model.Responses
+namespace LockNLoad.Model.Requests
 {
-    public class RoleResponse
+    public class CategoryInsertRequest
     {
-        public int Id { get; set; }
         public string Name { get; set; } = null!;
+        public string? Description { get; set; }
     }
 }

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace LockNLoad.Model.Responses
 {
-    public class RoleResponse
+    public class BillResponse
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
+        public int? RequestId { get; set; }
+        public int? Amount { get; set; }
+        public bool? IsPaid { get; set; }
     }
 }

@@ -4,16 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LockNLoad.Model.Responses
+namespace LockNLoad.Model.Requests
 {
-    public class UserRoleResponse
+    public class UserRoleUpdateRequest
     {
-
-        public int Id { get; set; }
-        public int UserRoleId { get; set; }
-
         public int UserId { get; set; }
-
         public int RoleId { get; set; }
     }
 }

@@ -8,21 +8,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace LockNLoad.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class DashboardController : BaseCRUDController<RoleResponse, RoleSearchObject, RoleInsertRequest, RoleUpdateRequest>
+    [Route("api/[controller]")]
+    [Authorize(Roles = "Administrator")]
+    public class DashboardController : BaseController<DashboardResponse, object>
     {
-        public DashboardController(ILogger<BaseController<RoleResponse, RoleSearchObject>> logger, IRoleService service) : base(logger, service)
-        {
+        private readonly IDashboardService _dashboardService;
 
+        public DashboardController(ILogger<DashboardController> logger, IDashboardService dashboardService)
+            : base(logger, null)
+        {
+            _dashboardService = dashboardService;
         }
 
-        [HttpGet("testConnection")]
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> TestConnection()
+        [HttpGet("dashboardPreview")]
+        public async Task<IActionResult> GetDashboardPreview()
         {
             try
             {
-                var model = await _service.GetAll();
+                var model = await _dashboardService.GetDashboardDataAsync();
                 return Ok(model);
             }
             catch (Exception ex)

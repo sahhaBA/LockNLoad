@@ -20,6 +20,17 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
+builder.Services.AddTransient<IAppointmentService, AppointmentService>();
+builder.Services.AddTransient<IBillService, BillService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IEquipmentService, EquipmentService>();
+builder.Services.AddTransient<IGenderService, GenderService>();
+builder.Services.AddTransient<IRequestService, RequestService>();
+builder.Services.AddTransient<IReviewService, ReviewService>();
+builder.Services.AddTransient<ITrainingGroundService, TrainingGroundService>();
+builder.Services.AddTransient<IUserAppointmentEquipmentService, UserAppointmentEquipmentService>();
+builder.Services.AddTransient<IUserAppointmentService, UserAppointmentService>();
+builder.Services.AddTransient<IUserRoleService, UserRoleService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<LockNLoadContext>(options =>
