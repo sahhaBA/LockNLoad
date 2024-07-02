@@ -56,5 +56,39 @@ namespace LockNLoad.Service.Services
             return Convert.ToBase64String(hashBytes);
         }
 
+        public async Task<int> GetTotalNumberOfUsers()
+        {
+            return await _context.Users.CountAsync();
+        }
+
+        public async Task<List<UserBasicDto>> GetMostValuableUsersForCurrentMonth()
+        {
+            var currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
+
+            var users = await _context.Users.Where(u => u.Bills.Any(b => b.IsPaid == true && b.DateTime.Month == currentMonth && b.DateTime.Year == currentYear))
+                                            .Select(u => new
+                                            {
+                                                User = u,
+                                                TotalAmount = u.Bills.Where(b => b.IsPaid == true && b.DateTime.Month == currentMonth && b.DateTime.Year == currentYear).Sum(b => b.Amount)
+                                            }).OrderByDescending(u => u.TotalAmount).Take(5).Select(u => new UserBasicDto
+                                                                                             {
+                                                                                                 FirstName = u.User.FirstName,
+                                                                                                 LastName = u.User.LastName,
+                                                                                                 UserName = u.User.Username,
+                                                                                                 ProfileImageUrl = u.User.ProfileImageUrl,
+                                                                                                 Credit = (double?)u.TotalAmount ?? 0
+                                                                                             }).ToListAsync();
+
+            return users;
+        }
+
+        public async Task<int> GetTotalNumberOfRegisteredUsersForCurrentMonth()
+        {
+            var currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
+
+            return await _context.Users.Where(x => x.DateOfRegistration.Value.Year == currentYear && x.DateOfRegistration.Value.Month == currentMonth).CountAsync(); 
+        }
     }
 }

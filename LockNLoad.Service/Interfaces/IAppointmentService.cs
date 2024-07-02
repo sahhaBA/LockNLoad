@@ -11,6 +11,7 @@ namespace LockNLoad.Service.Interfaces
 {
     public interface IAppointmentService : ICRUDService<AppointmentResponse, AppointmentSearchObject, AppointmentInsertRequest, AppointmentUpdateRequest>
     {
-
+        Task<int> GetTotalActiveAppointments();
+        Task<int> GetTotalNumberOfAppointmentsForCurrentMonth();
     }
 }

@@ -27,5 +27,6 @@ namespace LockNLoad.Service.Entities
         public virtual Gender? Gender { get; set; }
         public virtual ICollection<UserAppointment> UserAppointments { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<Bill> Bills { get; set; }
     }
 }

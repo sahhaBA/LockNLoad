@@ -64,6 +64,11 @@ namespace LockNLoad.Service.Contexts
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.RequestId)
                     .HasConstraintName("FK_Bills_RequestId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Bills) 
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Bills_UserId");
             });
 
             modelBuilder.Entity<Category>(entity =>

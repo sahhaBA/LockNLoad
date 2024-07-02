@@ -5,6 +5,7 @@ using LockNLoad.Model.SearchObjects;
 using LockNLoad.Service.Contexts;
 using LockNLoad.Service.Entities;
 using LockNLoad.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,17 @@ namespace LockNLoad.Service.Services
         {
         }
 
+        public async Task<double?> GetCurrentMonthRevenue()
+        {
+            var currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
 
+            return await _context.Bills.Where(x => x.IsPaid == true && x.DateTime.Month == currentMonth && x.DateTime.Year == currentYear).SumAsync(y => (double?)y.Amount);
+        }
+
+        public async Task<double?> GetTotalRevenue()
+        {
+            return await _context.Bills.Where(x => x.IsPaid == true).SumAsync(y => (double?)y.Amount);
+        }
     }
 }

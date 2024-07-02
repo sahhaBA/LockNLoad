@@ -31,6 +31,7 @@ builder.Services.AddTransient<ITrainingGroundService, TrainingGroundService>();
 builder.Services.AddTransient<IUserAppointmentEquipmentService, UserAppointmentEquipmentService>();
 builder.Services.AddTransient<IUserAppointmentService, UserAppointmentService>();
 builder.Services.AddTransient<IUserRoleService, UserRoleService>();
+builder.Services.AddTransient<IDashboardService, DashboardService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<LockNLoadContext>(options =>

@@ -7,6 +7,9 @@ namespace LockNLoad.Service.Interfaces
 {
     public interface IUserService : ICRUDService<UserResponse, UserSearchObject, UserInsertRequest, UserUpdateRequest>
     {
+        Task<List<UserBasicDto>> GetMostValuableUsersForCurrentMonth();
+        Task<int> GetTotalNumberOfRegisteredUsersForCurrentMonth();
+        Task<int> GetTotalNumberOfUsers();
         public Task<UserResponse> Login(string username, string password);
     }
 }

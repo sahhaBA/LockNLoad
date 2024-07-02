@@ -11,6 +11,7 @@ namespace LockNLoad.Service.Interfaces
 {
     public interface IRequestService : ICRUDService<RequestResponse, RequestSearchObject, RequestInsertRequest, RequestUpdateRequest>
     {
-
+        Task<List<RequestDto>> GetLatestRequests();
+        Task<int> GetTotalPendingRequests();
     }
 }

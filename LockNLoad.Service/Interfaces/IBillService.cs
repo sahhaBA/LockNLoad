@@ -11,6 +11,7 @@ namespace LockNLoad.Service.Interfaces
 {
     public interface IBillService : ICRUDService<BillResponse, BillSearchObject, BillInsertRequest, BillUpdateRequest>
     {
-
+        Task<double?> GetCurrentMonthRevenue();
+        Task<double?> GetTotalRevenue();
     }
 }

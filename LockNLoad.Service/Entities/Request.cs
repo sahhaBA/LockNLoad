@@ -18,6 +18,7 @@ namespace LockNLoad.Service.Entities
         public int? RejectedBy { get; set; }
         public DateTime? RejectedDateTime { get; set; }
         public string? Description { get; set; }
+        public DateTime? RecordDateTime { get; set; }
 
         public virtual Review? Review { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }
