@@ -8,8 +8,6 @@ namespace LockNLoad.Model.Responses
 {
     public class UserRoleResponse
     {
-
-        public int Id { get; set; }
         public int UserRoleId { get; set; }
 
         public int UserId { get; set; }

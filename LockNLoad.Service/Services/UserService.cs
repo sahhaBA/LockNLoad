@@ -93,26 +93,34 @@ namespace LockNLoad.Service.Services
 
         public async Task<List<UserResponse>> GetUserDataAsync(UserSearchObject search)
         {
-            List<UserResponse> users = new List<UserResponse>();
-
-            if (users != null && !string.IsNullOrEmpty(search.Name))
-            {
-                users = await _context.Users.Include(x => x.Gender).Where(x => x.FirstName.Contains(search.Name) || x.LastName.Contains(search.Name)).Select(a => new UserResponse()
+            var users = _context.Users.Include(x => x.Gender)
+                .Select(a => new UserResponse()
                 {
                     UserId = a.Id,
                     FirstName = a.FirstName,
                     LastName = a.LastName,
-                    UserName= a.Username,
+                    UserName = a.Username,
                     Email = a.Email,
                     Age = a.Age,
                     ProfileImageUrl = a.ProfileImageUrl,
                     Gender = a.Gender.Name,
-                    DateOfRegistration = a.DateOfRegistration
-                }).ToListAsync();
+                    DateOfRegistration = a.DateOfRegistration,
+                    UserRoles = a.UserRoles.Select(b => new UserRoleResponse
+                    {
+                        UserRoleId = b.Id,
+                        UserId = a.Id,
+                        RoleId = b.RoleId,
+                        RoleName = b.Role.Name
+                    }).ToList()
+                }).ToList();
+
+            if (search != null && !string.IsNullOrEmpty(search.Name)) {
+                users = users.Where(x => x.FirstName.Contains(search.Name) || x.LastName.Contains(search.Name)).ToList();
             }
+
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true && users?.Any() == true)
             {
-                users = users.Skip(search.Page.Value * search.PageSize.Value).Take(search.PageSize.Value).ToList();
+                users = users.Skip((search.Page.Value - 1) * search.PageSize.Value).Take(search.PageSize.Value).ToList();
             }
 
             return users;
