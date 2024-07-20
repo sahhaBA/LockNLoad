@@ -8,6 +8,6 @@ namespace LockNLoad.Model.SearchObjects
 {
     public class UserSearchObject : BaseSearchObject
     {
-        public bool? IsRoleIncluded { get; set; }
+        public string? Name { get; set; }
     }
 }

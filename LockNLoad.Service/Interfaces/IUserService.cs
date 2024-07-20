@@ -10,6 +10,7 @@ namespace LockNLoad.Service.Interfaces
         Task<List<UserBasicDto>> GetMostValuableUsersForCurrentMonth();
         Task<int> GetTotalNumberOfRegisteredUsersForCurrentMonth();
         Task<int> GetTotalNumberOfUsers();
+        Task <List<UserResponse>> GetUserDataAsync(UserSearchObject search);
         public Task<UserResponse> Login(string username, string password);
     }
 }

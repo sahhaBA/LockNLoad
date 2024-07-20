@@ -47,7 +47,7 @@ namespace LockNLoad.Api
 
                 foreach (var role in user.UserRoles)
                 {
-                    claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
+                    claims.Add(new Claim(ClaimTypes.Role, role.RoleName));
                 }
 
                 var identity = new ClaimsIdentity(claims, Scheme.Name);

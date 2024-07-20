@@ -12,7 +12,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace LockNLoad.Service.Services
 {
     public class UserService : BaseCRUDService<UserResponse, User, UserSearchObject, UserInsertRequest, UserUpdateRequest>, IUserService
@@ -33,6 +32,7 @@ namespace LockNLoad.Service.Services
 
             var hash = GenerateHash(entity.Salt, password);
 
+            //"eofKIdN/MN5Oqek+CXvsIqknwZ0="
             if (hash != entity.PasswordHash)
             {
                 return null;
@@ -89,6 +89,33 @@ namespace LockNLoad.Service.Services
             var currentYear = DateTime.Now.Year;
 
             return await _context.Users.Where(x => x.DateOfRegistration.Value.Year == currentYear && x.DateOfRegistration.Value.Month == currentMonth).CountAsync(); 
+        }
+
+        public async Task<List<UserResponse>> GetUserDataAsync(UserSearchObject search)
+        {
+            List<UserResponse> users = new List<UserResponse>();
+
+            if (users != null && !string.IsNullOrEmpty(search.Name))
+            {
+                users = await _context.Users.Include(x => x.Gender).Where(x => x.FirstName.Contains(search.Name) || x.LastName.Contains(search.Name)).Select(a => new UserResponse()
+                {
+                    UserId = a.Id,
+                    FirstName = a.FirstName,
+                    LastName = a.LastName,
+                    UserName= a.Username,
+                    Email = a.Email,
+                    Age = a.Age,
+                    ProfileImageUrl = a.ProfileImageUrl,
+                    Gender = a.Gender.Name,
+                    DateOfRegistration = a.DateOfRegistration
+                }).ToListAsync();
+            }
+            if (search?.Page.HasValue == true && search?.PageSize.HasValue == true && users?.Any() == true)
+            {
+                users = users.Skip(search.Page.Value * search.PageSize.Value).Take(search.PageSize.Value).ToList();
+            }
+
+            return users;
         }
     }
 }
