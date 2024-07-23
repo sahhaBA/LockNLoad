@@ -25,7 +25,7 @@ namespace LockNLoad.Api.Controllers
         {
             try
             {
-                var model = await _userService.GetUserDataAsync(search);
+                var model = await _userService.Get(search);
                 return Ok(model);
             }
             catch (Exception ex)

@@ -100,7 +100,7 @@ namespace LockNLoad.Service.Contexts
 
             modelBuilder.Entity<Gender>(entity =>
             {
-                entity.Property(e => e.Name)
+                entity.Property(e => e.GenderName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });

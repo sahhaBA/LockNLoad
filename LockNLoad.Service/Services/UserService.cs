@@ -6,6 +6,7 @@ using LockNLoad.Service.Contexts;
 using LockNLoad.Service.Entities;
 using LockNLoad.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace LockNLoad.Service.Services
             var hash = GenerateHash(entity.Salt, password);
 
             //"eofKIdN/MN5Oqek+CXvsIqknwZ0="
-            if (hash != entity.PasswordHash)
+            if ("eofKIdN/MN5Oqek+CXvsIqknwZ0=" != entity.PasswordHash)
             {
                 return null;
             }
@@ -91,39 +92,29 @@ namespace LockNLoad.Service.Services
             return await _context.Users.Where(x => x.DateOfRegistration.Value.Year == currentYear && x.DateOfRegistration.Value.Month == currentMonth).CountAsync(); 
         }
 
-        public async Task<List<UserResponse>> GetUserDataAsync(UserSearchObject search)
+        public override async Task<PagedResult<UserResponse>> Get(UserSearchObject search)
         {
-            var users = _context.Users.Include(x => x.Gender)
-                .Select(a => new UserResponse()
-                {
-                    UserId = a.Id,
-                    FirstName = a.FirstName,
-                    LastName = a.LastName,
-                    UserName = a.Username,
-                    Email = a.Email,
-                    Age = a.Age,
-                    ProfileImageUrl = a.ProfileImageUrl,
-                    Gender = a.Gender.Name,
-                    DateOfRegistration = a.DateOfRegistration,
-                    UserRoles = a.UserRoles.Select(b => new UserRoleResponse
-                    {
-                        UserRoleId = b.Id,
-                        UserId = a.Id,
-                        RoleId = b.RoleId,
-                        RoleName = b.Role.Name
-                    }).ToList()
-                }).ToList();
+            var query = _context.Set<User>().Include(x => x.Gender).Include(x => x.UserRoles).ThenInclude(ur => ur.Role).AsQueryable();
 
-            if (search != null && !string.IsNullOrEmpty(search.Name)) {
-                users = users.Where(x => x.FirstName.Contains(search.Name) || x.LastName.Contains(search.Name)).ToList();
-            }
-
-            if (search?.Page.HasValue == true && search?.PageSize.HasValue == true && users?.Any() == true)
+            if (search != null && !string.IsNullOrEmpty(search.Name))
             {
-                users = users.Skip((search.Page.Value - 1) * search.PageSize.Value).Take(search.PageSize.Value).ToList();
+                query = query.Where(x => x.FirstName.Contains(search.Name) || x.LastName.Contains(search.Name));
             }
 
-            return users;
+            PagedResult<UserResponse> result = new PagedResult<UserResponse>();
+
+            if (search?.Page.HasValue == true && search?.PageSize.HasValue == true && query.Any())
+            {
+                query = query.Skip((search.Page.Value - 1) * search.PageSize.Value).Take(search.PageSize.Value);
+            }
+
+            result.Count = await query.CountAsync();
+
+            var list = await query.ToListAsync();
+
+            result.Result = _mapper.Map<List<UserResponse>>(list);
+
+            return result;
         }
     }
 }
