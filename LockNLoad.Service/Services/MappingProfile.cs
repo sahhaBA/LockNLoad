@@ -14,7 +14,7 @@ namespace LockNLoad.Service.Services
     {
         public MappingProfile()
         {
-            CreateMap<User, UserResponse>();
+            CreateMap<User, UserResponse>().ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Name));
             CreateMap<UserInsertRequest, User>();
             CreateMap<UserUpdateRequest, User>();
 

@@ -11,7 +11,7 @@ namespace LockNLoad.Service.Entities
         }
 
         public int Id { get; set; }
-        public string? GenderName { get; set; }
+        public string? Name { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
     }

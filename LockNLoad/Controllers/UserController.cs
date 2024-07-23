@@ -1,4 +1,5 @@
-﻿using LockNLoad.Model.Responses;
+﻿using LockNLoad.Model.Requests;
+using LockNLoad.Model.Responses;
 using LockNLoad.Model.SearchObjects;
 using LockNLoad.Service.Interfaces;
 using LockNLoad.Service.Services;
@@ -10,7 +11,7 @@ namespace LockNLoad.Api.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Administrator")]
-    public class UserController : BaseController<UserResponse, object>
+    public class UserController : BaseCRUDController<UserResponse, UserSearchObject, UserInsertRequest, UserUpdateRequest>
     {
         private readonly IUserService _userService;
 
