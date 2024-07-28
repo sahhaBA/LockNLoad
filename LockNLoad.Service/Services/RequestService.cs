@@ -27,7 +27,7 @@ namespace LockNLoad.Service.Services
             return await _context.Requests.OrderByDescending(x => x.RecordDateTime)
                                           .Select(a => new RequestDto
                                           {
-                                              Type = a.UserAppointments.FirstOrDefault().Appointment.IsBooked == true ? RequestTypes.Booked : RequestTypes.Applied,
+                                              Type = a.UserAppointments.FirstOrDefault().Appointment.IsBooked == true ? RequestType.Booked : RequestType.Applied,
                                               User = new UserBasicDto
                                               {
                                                   FirstName = a.UserAppointments.FirstOrDefault().User.FirstName,
@@ -37,7 +37,7 @@ namespace LockNLoad.Service.Services
                                               },
                                               Credit = (double?)a.Bills.FirstOrDefault().Amount ?? 0,
                                               RequestDate = a.RecordDateTime.Value,
-                                              Status = a.ApprovedDateTime.HasValue ? RequestStatuses.Approved : a.RejectedDateTime.HasValue ? RequestStatuses.Rejected : RequestStatuses.Pending 
+                                              Status = a.ApprovedDateTime.HasValue ? RequestStatus.Approved : a.RejectedDateTime.HasValue ? RequestStatus.Rejected : RequestStatus.Pending 
                                           }).Take(10).ToListAsync();
         }
 

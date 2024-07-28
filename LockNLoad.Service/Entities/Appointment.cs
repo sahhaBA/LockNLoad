@@ -12,6 +12,7 @@ namespace LockNLoad.Service.Entities
 
         public int Id { get; set; }
         public int? TrainingGroundId { get; set; }
+        public int? Status { get; set; }
         public DateTime? StartDateTime { get; set; }
         public DateTime? EndDateTime { get; set; }
         public int? MaxParticipants { get; set; }

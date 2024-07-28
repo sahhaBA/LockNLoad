@@ -20,11 +20,11 @@ namespace LockNLoad.Model.Responses
 
     public class RequestDto
     {
-        public RequestTypes Type { get; set; }
+        public RequestType Type { get; set; }
         public UserBasicDto User { get; set; } = new UserBasicDto();
         public double Credit { get; set; }
         public DateTime RequestDate { get; set; }
-        public RequestStatuses Status { get; set; }
+        public RequestStatus Status { get; set; }
     }
 
     public class CurrentMonthDto

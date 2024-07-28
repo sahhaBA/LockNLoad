@@ -71,17 +71,12 @@ namespace LockNLoad.Service.Services
                                             .Select(u => new
                                             {
                                                 User = u,
-                                                TotalAmount = u.Bills.Where(b => b.IsPaid == true && b.DateTime.Month == currentMonth && b.DateTime.Year == currentYear).Sum(b => b.Amount)
-                                            }).OrderByDescending(u => u.TotalAmount).Take(5).Select(u => new UserBasicDto
-                                                                                             {
-                                                                                                 FirstName = u.User.FirstName,
-                                                                                                 LastName = u.User.LastName,
-                                                                                                 UserName = u.User.Username,
-                                                                                                 ProfileImageUrl = u.User.ProfileImageUrl,
-                                                                                                 Credit = (double?)u.TotalAmount ?? 0
-                                                                                             }).ToListAsync();
+                                                Credit = u.Bills.Where(b => b.IsPaid == true && b.DateTime.Month == currentMonth && b.DateTime.Year == currentYear).Sum(b => b.Amount)
+                                            }).OrderByDescending(u => u.Credit).Take(5).ToListAsync();
 
-            return users;
+            var result = _mapper.Map<List<UserBasicDto>>(users);
+
+            return result;
         }
 
         public async Task<int> GetTotalNumberOfRegisteredUsersForCurrentMonth()
@@ -94,7 +89,7 @@ namespace LockNLoad.Service.Services
 
         public override async Task<PagedResult<UserResponse>> Get(UserSearchObject search)
         {
-            var query = _context.Set<User>().Include(x => x.Gender).Include(x => x.UserRoles).ThenInclude(ur => ur.Role).AsQueryable();
+            var query = _context.Set<User>().AsQueryable().Include(x => x.Gender).Include(x => x.UserRoles).ThenInclude(ur => ur.Role).AsQueryable();
 
             if (search != null && !string.IsNullOrEmpty(search.Name))
             {
