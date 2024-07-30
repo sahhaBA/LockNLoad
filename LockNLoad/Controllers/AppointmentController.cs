@@ -21,7 +21,7 @@ namespace LockNLoad.Api.Controllers
         }
 
         [HttpGet("getAppointments")]
-        public async Task<IActionResult> GetUsers([FromQuery] AppointmentSearchObject search)
+        public async Task<IActionResult> GetAppointments([FromQuery] AppointmentSearchObject search)
         {
             try
             {
@@ -31,6 +31,24 @@ namespace LockNLoad.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Connection failed: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("deleteAppointment")]
+        public async Task<IActionResult> DeleteAppointment(int appointmentId)
+        {
+            try
+            {
+                bool success = await _appointmentService.Delete(appointmentId);
+                if (success)
+                {
+                    return NoContent(); 
+                }
+                return NotFound(); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }

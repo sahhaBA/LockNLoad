@@ -82,5 +82,46 @@ namespace LockNLoad.Service.Services
 
             return result;
         }
+
+        public async Task<bool> Delete(int id)
+        {
+            var appointment = await _context.Appointments.FindAsync(id);
+            if (appointment != null)
+            {
+                var userAppointments = await _context.UserAppointments
+                    .Where(t => t.AppointmentId == id).ToListAsync();
+
+                if (userAppointments != null)
+                {
+                    var userAppointmentEquipment = await _context.UserAppointmentEquipments
+                        .Where(t => userAppointments.Any(x => x.Id == t.UserAppointmentId)).ToListAsync();
+
+                    var requests = await _context.Requests
+                        .Where(t => userAppointments.Any(x => x.RequestId == t.Id)).ToListAsync();
+
+                    if(requests != null)
+                    {
+                        var bills = await _context.Bills
+                            .Where(t => requests.Any(x => x.Id == t.RequestId)).ToListAsync();
+
+                        var reviews = await _context.Reviews
+                            .Where(t => requests.Any(x => x.ReviewId == t.Id)).ToListAsync();
+
+                        _context.Bills.RemoveRange(bills);
+                        _context.Requests.RemoveRange(requests);
+                        _context.Reviews.RemoveRange(reviews);
+                    }
+
+                    _context.UserAppointmentEquipments.RemoveRange(userAppointmentEquipment);
+                    _context.UserAppointments.RemoveRange(userAppointments);
+                }
+
+                _context.Appointments.Remove(appointment);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
     }
 }
