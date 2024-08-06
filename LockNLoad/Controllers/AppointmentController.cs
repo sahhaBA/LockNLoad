@@ -51,5 +51,26 @@ namespace LockNLoad.Api.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPost("addAppointment")]
+        public async Task<IActionResult> AddAppointment(AppointmentInsertRequest request)
+        {
+            try
+            {
+                var success = await _appointmentService.Insert(request);
+                if (success != null)
+                {
+                    return Ok("Appointment added successfully.");
+                }
+                else
+                {
+                    return BadRequest("Failed to add appointment.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

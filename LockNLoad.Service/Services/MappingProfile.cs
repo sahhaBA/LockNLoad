@@ -23,6 +23,10 @@ namespace LockNLoad.Service.Services
             CreateMap<Role, RoleResponse>();
             CreateMap<RoleInsertRequest, Role>();
             CreateMap<RoleUpdateRequest, Role>();
+
+            CreateMap<Appointment, AppointmentResponse>();
+            CreateMap<AppointmentInsertRequest, Appointment>();
+            CreateMap<AppointmentUpdateRequest, Appointment>();
         }
     }
 }

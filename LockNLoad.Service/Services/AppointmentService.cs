@@ -36,6 +36,19 @@ namespace LockNLoad.Service.Services
             return await _context.Appointments.Where(x => x.StartDateTime.Value.Year == currentYear && x.StartDateTime.Value.Month == currentMonth).CountAsync();
         }
 
+        public override async Task<AppointmentResponse> Insert(AppointmentInsertRequest request)
+        {
+            var set = _context.Set<Appointment>();
+
+            Appointment entity = _mapper.Map<Appointment>(request);
+
+            set.Add(entity);
+            await BeforeInsert(entity, request);
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<AppointmentResponse>(entity);
+        }
+
         public override async Task<PagedResult<AppointmentResponse>> Get(AppointmentSearchObject search)
         {
             var query = _context.Set<Appointment>().AsQueryable().Include(x => x.TrainingGround).Include(x => x.UserAppointments).AsQueryable();
@@ -91,7 +104,7 @@ namespace LockNLoad.Service.Services
                 var userAppointments = await _context.UserAppointments
                     .Where(t => t.AppointmentId == id).ToListAsync();
 
-                if (userAppointments != null)
+                if (userAppointments?.Any() == true)
                 {
                     var userAppointmentEquipment = await _context.UserAppointmentEquipments
                         .Where(t => userAppointments.Any(x => x.Id == t.UserAppointmentId)).ToListAsync();
@@ -99,7 +112,7 @@ namespace LockNLoad.Service.Services
                     var requests = await _context.Requests
                         .Where(t => userAppointments.Any(x => x.RequestId == t.Id)).ToListAsync();
 
-                    if(requests != null)
+                    if(requests?.Any() == true)
                     {
                         var bills = await _context.Bills
                             .Where(t => requests.Any(x => x.Id == t.RequestId)).ToListAsync();

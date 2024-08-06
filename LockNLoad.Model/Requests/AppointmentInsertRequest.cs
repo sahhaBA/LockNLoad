@@ -14,5 +14,6 @@ namespace LockNLoad.Model.Requests
         public int MaxParticipants { get; set; }
         public bool? IsBooked { get; set; }
         public string? Description { get; set; }
+        public int Status { get; set; }
     }
 }
