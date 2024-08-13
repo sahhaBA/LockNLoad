@@ -20,7 +20,7 @@ namespace LockNLoad.Api.Controllers
             _dashboardService = dashboardService;
         }
 
-        [HttpGet("dashboardPreview")]
+        [HttpGet("DashboardPreview")]
         public async Task<IActionResult> GetDashboardPreview()
         {
             try

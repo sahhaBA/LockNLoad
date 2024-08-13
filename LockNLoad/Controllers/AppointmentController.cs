@@ -34,7 +34,7 @@ namespace LockNLoad.Api.Controllers
             }
         }
 
-        [HttpDelete("deleteAppointment")]
+        [HttpDelete("DeleteAppointment")]
         public async Task<IActionResult> DeleteAppointment(int appointmentId)
         {
             try
@@ -52,7 +52,7 @@ namespace LockNLoad.Api.Controllers
             }
         }
 
-        [HttpPost("addAppointment")]
+        [HttpPost("AddAppointment")]
         public async Task<IActionResult> AddAppointment(AppointmentInsertRequest request)
         {
             try

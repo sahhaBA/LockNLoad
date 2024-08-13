@@ -33,8 +33,7 @@ namespace LockNLoad.Service.Services
 
             var hash = GenerateHash(entity.Salt, password);
 
-            //"eofKIdN/MN5Oqek+CXvsIqknwZ0="
-            if ("eofKIdN/MN5Oqek+CXvsIqknwZ0=" != entity.PasswordHash)
+            if (hash != entity.PasswordHash)
             {
                 return null;
             }
@@ -55,6 +54,50 @@ namespace LockNLoad.Service.Services
             byte[] hashBytes = algorithm.ComputeHash(combinedBytes);
 
             return Convert.ToBase64String(hashBytes);
+        }
+
+        public override async Task BeforeInsert(User entity, UserInsertRequest request)
+        {
+            var salt = GenerateSalt();
+
+            var passwordHash = GenerateHash(salt, request.Password);
+
+            entity.Salt = salt;
+            entity.PasswordHash = passwordHash;
+        }
+
+        public static string GenerateSalt()
+        {
+            byte[] saltBytes = new byte[16];
+
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(saltBytes);
+            }
+
+            return Convert.ToBase64String(saltBytes);
+        }
+
+        public override async Task<UserResponse> Insert(UserInsertRequest request)
+        {
+            var set = _context.Set<User>();
+
+            var userExists = set.FirstOrDefault(x => x.Username == request.Username || x.Email == request.Email);
+
+            if (userExists != null)
+            {
+                throw new Exception("A user with the same username or email already exists.");
+            }
+
+            User entity = _mapper.Map<User>(request);
+
+            set.Add(entity);
+
+            await BeforeInsert(entity, request);
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserResponse>(entity);
         }
 
         public async Task<int> GetTotalNumberOfUsers()

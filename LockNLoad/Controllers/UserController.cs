@@ -34,5 +34,26 @@ namespace LockNLoad.Api.Controllers
                 return StatusCode(500, $"Connection failed: {ex.Message}");
             }
         }
+
+        [HttpPost("RegisterNewUser")]
+        public async Task<IActionResult> RegisterNewUser(UserInsertRequest request)
+        {
+            try
+            {
+                var success = await _userService.Insert(request);
+                if (success != null)
+                {
+                    return Ok("Appointment added successfully.");
+                }
+                else
+                {
+                    return BadRequest("Failed to add appointment.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Connection failed: {ex.Message}");
+            }
+        }
     }
 }
