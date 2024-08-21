@@ -10,7 +10,6 @@ namespace LockNLoad.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Administrator")]
     public class UserController : BaseCRUDController<UserResponse, UserSearchObject, UserInsertRequest, UserUpdateRequest>
     {
         private readonly IUserService _userService;
@@ -21,6 +20,7 @@ namespace LockNLoad.Api.Controllers
             _userService = userService;
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("getUsers")]
         public async Task<IActionResult> GetUsers([FromQuery] UserSearchObject search)
         {
@@ -35,6 +35,7 @@ namespace LockNLoad.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("RegisterNewUser")]
         public async Task<IActionResult> RegisterNewUser(UserInsertRequest request)
         {
@@ -43,11 +44,11 @@ namespace LockNLoad.Api.Controllers
                 var success = await _userService.Insert(request);
                 if (success != null)
                 {
-                    return Ok("Appointment added successfully.");
+                    return Ok("User added successfully.");
                 }
                 else
                 {
-                    return BadRequest("Failed to add appointment.");
+                    return BadRequest("Failed to add user.");
                 }
             }
             catch (Exception ex)

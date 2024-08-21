@@ -97,6 +97,18 @@ namespace LockNLoad.Service.Services
 
             await _context.SaveChangesAsync();
 
+            var userRoleSet = _context.Set<UserRole>();
+
+            var userRole = new UserRole
+            {
+                UserId = entity.Id,
+                RoleId = 2
+            };
+
+            userRoleSet.Add(userRole);
+
+            await _context.SaveChangesAsync();
+
             return _mapper.Map<UserResponse>(entity);
         }
 
