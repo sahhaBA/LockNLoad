@@ -18,9 +18,14 @@ namespace LockNLoad.Service.Services
 
     public class AppointmentService : BaseCRUDService<AppointmentResponse, Appointment, AppointmentSearchObject, AppointmentInsertRequest, AppointmentUpdateRequest>, IAppointmentService
     {
-        public AppointmentService(LockNLoadContext context, IMapper mapper)
+        private readonly IAppointmentService _appointmentService;
+        private readonly ITrainingGroundService _trainingGroundService;
+
+        public AppointmentService(LockNLoadContext context, IAppointmentService appointmentService, ITrainingGroundService trainingGroundService, IMapper mapper)
             : base(context, mapper)
         {
+            _appointmentService = appointmentService;
+            _trainingGroundService = trainingGroundService;
         }
 
         public async Task<int> GetTotalActiveAppointments()
@@ -135,6 +140,30 @@ namespace LockNLoad.Service.Services
             }
 
             return false;
+        }
+
+        public async Task<AppointmentDetailResponse> GetDetailsByAppointmentIdAsync(int appointmentId)
+        {
+            var appointment = await _appointmentService.GetById(appointmentId);
+            var trainingGround = await _trainingGroundService.GetById(appointment.TrainingGroundId);
+
+            var model = new AppointmentDetailResponse
+            {
+                AppointmentId = appointment.Id,
+                TrainingGroundId = appointment.TrainingGroundId,
+                TrainingGroundName = trainingGround.Name,
+                TrainingGroundLocation = trainingGround.Location,
+                TrainingGroundLocationImageUrl = trainingGround.LocationImageUrl,
+                Date = DateOnly.FromDateTime(appointment.StartDateTime ?? DateTime.Now),
+                StartTime = TimeOnly.FromDateTime(appointment.StartDateTime ?? DateTime.Now),
+                EndDate = TimeOnly.FromDateTime(appointment.EndDateTime ?? DateTime.Now),
+                NumberOfParticipants = 0,
+                MaxParticipants = appointment.MaxParticipants ?? 0,
+                Status = appointment.Status == Enumerations.AppointmentStatus.Opened ? "Aktivan" : "Završen",
+                Description = appointment.Description
+            };
+
+            return model;
         }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LockNLoad.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize(Roles = "Administrator")]
     public class DashboardController : BaseController<DashboardResponse, object>
     {

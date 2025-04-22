@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LockNLoad.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class UserController : BaseCRUDController<UserResponse, UserSearchObject, UserInsertRequest, UserUpdateRequest>
     {
         private readonly IUserService _userService;
@@ -21,7 +21,7 @@ namespace LockNLoad.Api.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpGet("getUsers")]
+        [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers([FromQuery] UserSearchObject search)
         {
             try

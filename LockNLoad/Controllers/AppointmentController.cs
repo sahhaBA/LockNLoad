@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LockNLoad.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize(Roles = "Administrator")]
     public class AppointmentController : BaseCRUDController<AppointmentResponse, AppointmentSearchObject, AppointmentInsertRequest, AppointmentUpdateRequest>
     {
@@ -20,12 +20,26 @@ namespace LockNLoad.Api.Controllers
             _appointmentService = appointmentService;
         }
 
-        [HttpGet("getAppointments")]
+        [HttpGet("GetAppointments")]
         public async Task<IActionResult> GetAppointments([FromQuery] AppointmentSearchObject search)
         {
             try
             {
                 var model = await _appointmentService.Get(search);
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Connection failed: {ex.Message}");
+            }
+        }
+
+        [HttpGet("GetAppointmentDetails")]
+        public async Task<IActionResult> GetAppointmentDetails(int appointmentId)
+        {
+            try
+            {
+                var model = await _appointmentService.GetDetailsByAppointmentIdAsync(appointmentId);
                 return Ok(model);
             }
             catch (Exception ex)

@@ -14,5 +14,6 @@ namespace LockNLoad.Service.Interfaces
         Task<int> GetTotalActiveAppointments();
         Task<int> GetTotalNumberOfAppointmentsForCurrentMonth();
         Task<bool> Delete(int appointmentId);
+        Task<AppointmentDetailResponse> GetDetailsByAppointmentIdAsync(int appointmentId);
     }
 }

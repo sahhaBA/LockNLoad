@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LockNLoad.Model.Constants;
 
 namespace LockNLoad.Model.Responses
 {
@@ -15,6 +16,7 @@ namespace LockNLoad.Model.Responses
         public DateTime? EndDateTime { get; set; }
         public int? MaxParticipants { get; set; }
         public bool? IsBooked { get; set; }
+        public Enumerations.AppointmentStatus Status { get; set; }
         public string? Description { get; set; }
     }
 }
